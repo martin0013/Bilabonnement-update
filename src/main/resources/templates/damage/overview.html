@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Skade og udbedring - Bilabonnement</title>
+  <link rel="stylesheet" href="/css/leaseAgreement.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- Martin: Topbar med logo, navigation og brugerinfo -->
+<header class="top-wrapper">
+  <div class="logo-left">
+    <a href="/intranet">
+      <img src="/images/logo.png" alt="Bilabonnement logo">
+    </a>
+  </div>
+
+  <nav class="center-logos">
+    <a href="/dataentry/cars">
+      <img src="/images/biler.png" alt="Biler">
+      <span>BILER</span>
+    </a>
+    <a href="/damage/overview">
+      <img src="/images/skader.png" alt="Skade og udbedring">
+      <span>SKADE OG UDBEDRING</span>
+    </a>
+    <a href="/leaseagreement">
+      <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+      <span>LEJEAFTALER</span>
+    </a>
+    <a href="/customers/startpage">
+      <img src="/images/kunder.png" alt="Kunder">
+      <span>KUNDER</span>
+    </a>
+    <a href="/business/dashboard">
+      <img src="/images/dashboard.png" alt="Dashboard">
+      <span>DASHBOARD</span>
+    </a>
+  </nav>
+
+  <div class="right-side">
+    <div class="search-bar">
+      <input type="text" placeholder="Søg...">
+      <button>Søg</button>
+    </div>
+    <div class="user-info">
+      <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+      <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- Faneknapper -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <a href="/damage/overview" class="tab-button active">Oversigt over skader</a>
+    <a href="/damages/create" class="tab-button">Opret en skade</a>
+  </div>
+</div>
+
+<!-- Info-tekst -->
+<div class="info-box">
+  <strong>Oversigt over skadesrapporter</strong><br><br>
+  Hos Bilabonnement er der følgende biler med en skade:
+</div>
+
+<!-- Skadestabel -->
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>REGISTRERINGSNUMMER</th>
+      <th>MÆRKE / MODEL</th>
+      <th>BESKRIVELSE</th>
+      <th>PRIS</th>
+      <th>DATO REGISTRERET</th>
+      <th>ADVARSEL</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="damage : ${damageList}" th:classappend="${damage.old} ? 'table-danger'">
+      <td th:text="${damage.registrationNumber}">AB12345</td>
+      <td th:text="${damage.brand + ' ' + damage.modelName}">Peugeot 208</td>
+      <td th:text="${damage.description}">Bulet dør</td>
+      <td th:text="${damage.price + ' kr'}">1234.00 kr</td>
+      <td th:text="${damage.reportDate}">2025-05-10</td>
+      <td th:text="${damage.old} ? '⚠️ Over 10 dage' : ''"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

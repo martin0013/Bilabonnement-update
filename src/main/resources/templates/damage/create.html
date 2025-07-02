@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret skade – Bilabonnement</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- tving browseren til at hente ny version -->
+</head>
+<body>
+
+<header class="top-wrapper">
+    <div class="logo-left">
+        <img src="/images/logo.png" alt="Bilabonnement logo">
+    </div>
+
+    <nav class="center-logos">
+        <!-- Dynamisk navigation baseret på brugerrolle - Isabella -->
+        <!--1.2.4: Vis links baseret på rolle (med th:if)-->
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/dataentry/cars">
+                <img src="/images/biler.png" alt="Biler">
+                <span>BILER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/damage/overview">
+                <img src="/images/skader.png" alt="Skade og udbedring">
+                <span>SKADE OG UDBEDRING</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/leaseagreement">
+                <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+                <span>LEJEAFTALER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'ADMIN'}">
+            <a href="/medarbejder">
+                <img src="/images/medarbejder.png" alt="Medarbejder">
+                <span>MEDARBEJDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING'}">
+            <a href="/customers/startpage">
+                <img src="/images/kunder.png" alt="Kunder">
+                <span>KUNDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/business/dashboard">
+                <img src="/images/dashboard.png" alt="Dashboard">
+                <span>DASHBOARD</span>
+            </a>
+        </th:block>
+
+        <a href="/indbakke">
+            <img src="/images/indbakke.png" alt="Indbakke">
+            <span>INDBAKKE</span>
+        </a>
+    </nav>
+
+    <!--1.2.6: Søgefunktion (mock)-->
+    <div class="right-side">
+        <div class="search-bar">
+            <input type="text" placeholder="Søg...">
+            <button>Søg</button>
+        </div>
+
+        <!--1.2.5: Tilføj log ud-knap med link til /logout-->
+        <!--1.2.3: Vis brugerens navn og rolle i toppen til venstre af siden-->
+        <div class="user-info">
+            <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+            <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+            <a href="/logout" class="logout-link">Log ud</a>
+        </div>
+
+
+
+    </div>
+</header>
+
+
+
+<main>
+    <div class="login-container">
+    <h2>Opret ny skadesrapport</h2>
+
+        <div th:if="${successMessage}" class="success-message">
+            <p th:text="${successMessage}"></p>
+        </div>
+
+    <form th:action="@{/damages/createNew}" th:object="${damageReport}" method="post">
+        <div class="form-group">
+            <label for="description">Beskrivelse:</label>
+            <input type="text" th:field="*{description}" id="description" placeholder="Beskriv skaden..." required>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Pris for udbedring af skaden:</label>
+            <input type="text" th:field="*{price}" id="price" placeholder="f.eks. 1500" pattern="^\d+(\.\d{1,2})?$" min="0" required>
+        </div>
+
+        <div class="form-group">
+            <label for="registrationNumber">Bilens registreringsnummer:</label>
+            <input type="text" th:field="*{registrationNumber}" id="registrationNumber" placeholder="f.eks. AB12345" required>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" th:field="*{customerPresent}"> Kunde var til stede ved inspektionen
+            </label>
+        </div>
+
+        <button type="submit">Opret</button>
+    </form>
+
+</div>
+
+</div>
+
+</main>
+</body>
+</html>
+

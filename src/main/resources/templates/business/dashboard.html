@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard – Bilabonnement</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js skal være her -->
+</head>
+<body>
+
+<header class="top-wrapper">
+    <div class="logo-left">
+        <a href="/intranet" title="Gå til forsiden">
+            <img src="/images/logo.png" alt="Bilabonnement logo">
+        </a>
+    </div>
+
+    <nav class="center-logos">
+        <!-- Dynamisk navigation baseret på brugerrolle -->
+
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/dataentry/cars" class = "car-style">
+                <img src="/images/biler.png" alt="Biler">
+                <span>BILER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/damage/overview">
+                <img src="/images/skader.png" alt="Skade og udbedring">
+                <span>SKADE OG UDBEDRING</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/leaseagreement">
+                <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+                <span>LEJEAFTALER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'ADMIN'}">
+            <a href="/medarbejder">
+                <img src="/images/medarbejder.png" alt="Medarbejder">
+                <span>MEDARBEJDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING'}">
+            <a href="/customers/startpage">
+                <img src="/images/kunder.png" alt="Kunder">
+                <span>KUNDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/business/dashboard">
+                <img src="/images/dashboard.png" alt="Dashboard">
+                <span>DASHBOARD</span>
+            </a>
+        </th:block>
+
+        <a href="/indbakke">
+            <img src="/images/indbakke.png" alt="Indbakke">
+            <span>INDBAKKE</span>
+        </a>
+    </nav>
+
+    <div class="right-side">
+        <div class="search-bar">
+            <input type="text" placeholder="Søg...">
+            <button>Søg</button>
+        </div>
+
+        <div class="user-info">
+            <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+            <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrapper dashboard">
+
+    <div class="dashboard-layout">
+
+        <!-- Venstre kolonne -->
+        <div class="left-panel">
+            <div class="dashboard-card">
+                <h3>Udlejede biler</h3>
+                <p>Antal biler der er udlejet lige nu:</p>
+                <strong th:text="${activeLeases}">0</strong>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Samlet pris</h3>
+                <p>Samlet pris på udlejede biler:</p>
+                <strong th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}">0,00</strong> kr.
+            </div>
+
+            <div class="dashboard-card placeholder">
+                <h3>Kommende funktion</h3>
+                <p>Her kan du fx vise skader, omsætning eller grafer.</p>
+            </div>
+        </div>
+
+        <!-- Højre kolonne: tabel -->
+        <div class="right-panel">
+            <div class="table-box">
+                <h3>Lagerstatus pr. model</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Modelnavn</th>
+                        <th>Available</th>
+                        <th>Rented</th>
+                        <th>Returned</th>
+                        <th>Damaged</th>
+                        <th>Sold</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="entry : ${groupedStatusByModel}">
+                        <td th:text="${entry.key}">Modelnavn</td>
+                        <td th:text="${entry.value['Available'] ?: 0}">0</td>
+                        <td th:text="${entry.value['Rented'] ?: 0}">0</td>
+                        <td th:text="${entry.value['Returned'] ?: 0}">0</td>
+                        <td th:text="${entry.value['Damaged'] ?: 0}">0</td>
+                        <td th:text="${entry.value['Sold'] ?: 0}">0</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Graf over flådestatus -->
+        <div class="chart-box">
+            <h3>Aktuel flådestatus (graf)</h3>
+            <canvas id="fleetStatusChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- JavaScript til grafen -->
+        <script th:inline="javascript">
+            const fleetData = {
+                labels: ["Udlejede", "Ledige", "Skadede", "Returneret"],
+                datasets: [{
+                    label: "Antal biler",
+                    data: [
+                        [[${carStatusCounts['Rented'] ?: 0}]],
+                        [[${carStatusCounts['Available'] ?: 0}]],
+                        [[${carStatusCounts['Damaged'] ?: 0}]],
+                        [[${carStatusCounts['Returned'] ?: 0}]]
+                       // [[${carStatusCounts['Sold'] ?: 0}]] -- en ny til oversigt over solgte biler
+                    ],
+                    backgroundColor: [
+                        "#005EB8", // Udlejede – mørk blå
+                        "#0077CC", // Ledige – mellemblå
+                        "#3399FF", // Skadede – klar blå
+                        "#66B2FF"  // Returneret – lys blå
+                       // "#c6e0ff"  // Returneret – lysere blå - en ny til oversigt over solgte biler
+                    ],
+                    borderRadius: 6
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: fleetData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            };
+
+            const fleetStatusChart = new Chart(
+                document.getElementById('fleetStatusChart'),
+                config
+            );
+        </script>
+
+    </div>
+
+</body>
+</html>

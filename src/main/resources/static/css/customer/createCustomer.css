@@ -1,0 +1,91 @@
+/* createCustomer.css */
+
+/* Hoved-container */
+.create-customer-page {
+    padding: 40px 0;
+    background-color: #f5f5f5;
+}
+
+/* Wrapper med max-bredde og centreret */
+.create-customer-page .content-wrapper {
+    width: 50%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
+/* Overskrift */
+.create-customer-page h1 {
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #143c54;
+}
+
+/* Formular */
+.create-customer-form {
+    background: #ffffff;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+/* Labels */
+.create-customer-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #143c54;
+}
+
+/* Inputs */
+.create-customer-form input[type="text"],
+.create-customer-form input[type="email"],
+.create-customer-form input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* Checkbox label justeres inline */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Submit-knap centreret og bred nok */
+.create-customer-form button {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #005EB8;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Tilbage-link centreret */
+.back-link {
+    display: block;
+    text-align: center;
+    margin: 25px 0 0;
+    color: #005EB8;
+    text-decoration: none;
+}
+.back-link:hover {
+    color: #00AEEF;
+}

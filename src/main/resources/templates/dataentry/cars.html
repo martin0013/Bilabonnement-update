@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bil</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="top-wrapper">
+    <div class="logo-left">
+        <a href="/intranet" title="Gå til forsiden">
+            <img src="/images/logo.png" alt="Bilabonnement logo">
+        </a>
+    </div>
+
+    <nav class="center-logos">
+        <!-- Isabella - Dynamisk navigation baseret på brugerrolle -->
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/dataentry/cars" class = "car-style">
+                <img src="/images/biler.png" alt="Biler">
+                <span>BILER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/damage/overview">
+                <img src="/images/skader.png" alt="Skade og udbedring">
+                <span>SKADE OG UDBEDRING</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/leaseagreement">
+                <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+                <span>LEJEAFTALER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'ADMIN'}">
+            <a href="/medarbejder">
+                <img src="/images/medarbejder.png" alt="Medarbejder">
+                <span>MEDARBEJDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING'}">
+            <a href="/customers/startpage">
+                <img src="/images/kunder.png" alt="Kunder">
+                <span>KUNDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/business/dashboard">
+                <img src="/images/dashboard.png" alt="Dashboard">
+                <span>DASHBOARD</span>
+            </a>
+        </th:block>
+
+        <a href="/indbakke">
+            <img src="/images/indbakke.png" alt="Indbakke">
+            <span>INDBAKKE</span>
+        </a>
+    </nav>
+
+    <div class="right-side">
+        <div class="search-bar">
+            <input type="text" placeholder="Søg...">
+            <button>Søg</button>
+        </div>
+
+        <div class="user-info">
+            <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+            <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+        </div>
+    </div>
+</header>
+
+<div th:if="${successMessage}" class="success-message">
+    <p th:text="${successMessage}"></p>
+</div> <!--Isabella - Succesbesked når man opretter en bil correct -->
+
+<div class="table-wrapper">
+    <div class="model-search-wrapper">
+        <label for="modelSearch">🔍 Søg efter bilmodel:</label>
+        <input type="text" id="modelSearch" class="model-search-input" placeholder="F.eks. Sandero eller Captur" onkeyup="filterByModel()">
+    </div>
+
+    <h3 style="text-align: center;"> <!-- Sumaya - Inline så overskriften nemt kan centreres -->
+        Oversigt over biler
+    </h3>
+
+    <table class="table">
+    <thead>
+    <tr>
+        <th>Registreringsnummer</th>
+        <th>Stelnummer (VIN)</th>
+        <th>Status</th>
+        <th>Farve</th>
+        <th>Kilometerstand</th>
+        <th>Lokation</th>
+        <th>Mærke</th>
+        <th>Modelnavn</th>
+        <th>Udstyrsniveau</th>
+        <th>CO₂-udledning (g/km)</th>
+        <th>Pris pr. måned</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car : ${cars}">
+        <td th:text="${car.registrationNumber}">AB12345</td>
+        <td th:text="${car.vinNumber}">VIN123456789</td>
+        <td>
+            <!-- Sumaya - Dropdown til opdatering af bilens status. Når en ny status vælges, sendes formularen automatisk.
+            Brugeren kan fx ændre status til "Rented", "Damaged" eller "Sold". -->
+
+            <form th:action="@{/cars/updateStatus}" method="post">
+                <input type="hidden" name="registrationNumber" th:value="${car.registrationNumber}" />
+
+                <select name="status" onchange="this.form.submit()">
+                    <option th:each="s : ${T(com.example.bilabonnement.Model.Car.CarStatus).values()}"
+                            th:value="${s}"
+                            th:text="${s}"
+                            th:selected="${s.name() == car.status}">
+                    </option>
+                </select>
+            </form>
+        </td>
+
+        <td th:text="${car.color}">Sort</td>
+        <td th:text="${car.mileage}">15000</td>
+        <td th:text="${car.location}">København</td>
+        <td th:text="${car.brand}">Toyota</td>
+        <td th:text="${car.modelName}">Yaris</td>
+        <td th:text="${car.equipmentLevel}">Comfort</td>
+        <td th:text="${car.co2Emission}">99</td>
+        <td th:text="${car.monthlyPrice}">3.500</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<br>
+<a href="/cars/create" class="button-outline">Opret ny bil</a>
+
+<!-- Sumaya - giver lidt mellemrum mellem de to tabeller -->
+<br>
+<br>
+<br>
+<br>
+
+<h3 style="text-align: center;">  <!-- Sumaya - Inline så overskriften nemt kan centreres -->
+    Oversigt over solgte biler
+</h3>
+
+
+<div class="table-wrapper">
+<table class="table">
+    <thead>
+    <tr>
+        <th>REG. NR.</th>
+        <th>STELNUMMER (VIN)</th>
+        <th>MÆRKE</th>
+        <th>MODELNAVN</th>
+        <th>LOKATION</th>
+        <th>FARVE</th>
+        <th>KILOMETER</th>
+        <th>PRIS / MÅNED</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car : ${soldCars}">
+        <td th:text="${car.registrationNumber}">AB12345</td>
+        <td th:text="${car.vinNumber}">VIN123456789</td>
+        <td th:text="${car.brand}">Toyota</td>
+        <td th:text="${car.modelName}">Yaris</td>
+        <td th:text="${car.location}">København</td>
+        <td th:text="${car.color}">Sort</td>
+        <td th:text="${car.mileage}">15000</td>
+        <td th:text="${car.monthlyPrice}">3.500</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<!-- Sumaya - JS til filtrering og søgning efter bil -->
+<script>
+// Filtrer biler ud fra modelnavn
+    function filterByModel() {
+        const input = document.getElementById("modelSearch").value.toLowerCase();
+        const rows = document.querySelectorAll(".table tbody tr");
+
+        rows.forEach(row => {
+            const model = row.cells[7].textContent.toLowerCase(); // 8. kolonne = modelnavn
+            row.style.display = model.includes(input) ? "" : "none";
+        });
+    }
+</script>
+</body>
+</html>
+

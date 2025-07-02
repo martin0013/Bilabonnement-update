@@ -1,0 +1,144 @@
+/* Oversigt-container */
+.overview-container {
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    width: 90%; /* Begræns til 90% af skærmbredden */
+    max-width: none;
+    display: flex; /* Fleksibel boks */
+    flex-direction: column; /* Lodret stak */
+    align-items: center; /* Centrer horisontalt */
+    gap: 20px; /* Luft mellem elementer */
+}
+
+/* Overskriftstekst */
+.overview-container h1 {
+    font-size: 28px;
+    color: #000;
+    margin: 20px 0;
+}
+
+/* Brødtekst */
+.overview-container p {
+    font-size: 16px;
+    color: #143c54;
+    margin-bottom: 20px;
+}
+
+/* Tabel-wrapper */
+.table-wrapper {
+    width: 100%;
+    margin-top: 0; /* Gap dækker afstanden */
+    overflow-x: auto; /* Scroll ved smalle skærme */
+}
+
+/* Grundlæggende tabel-layout */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+Lot of code in the middle
+
+    /* Tabel-header */
+.table thead {
+    background-color: #005EB8;
+    color: #fff;
+}
+
+.table thead th {
+    padding: 12px 15px;
+    text-align: center; /* Centrer tekst */
+    vertical-align: middle;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+/* Tabel-celler */
+.table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+/* Hover-effekt på rækker */
+.table tbody tr:hover {
+    background-color: #f2f8ff;
+}
+
+/* Links i tabel */
+.table td a {
+    color: #005EB8;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.table td a:hover {
+    text-decoration: underline;
+}
+
+/* Besked ved ingen data */
+.no-data-message {
+    font-size: 16px;
+    color: #143c54;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+}
+
+/* Knappen til oversigt */
+.overview-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #005EB8;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.overview-button:hover {
+    background-color: #00AEEF;
+}
+
+/* Søge-container */
+.search-container {
+    margin-bottom: 1rem;
+    text-align: right;
+}
+
+/* Input i søgeboks */
+.table-search-input {
+    padding: 0.5rem;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Søgeknap */
+.table-search-button {
+    padding: 0.5rem 0.75rem;
+    margin-left: 0.25rem;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.table-search-button:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="top-wrapper">
+    <div class="logo-left">
+        <a href="/intranet" title="Gå til forsiden">
+            <img src="/images/logo.png" alt="Bilabonnement logo">
+        </a>
+    </div>
+
+    <nav class="center-logos">
+        <!-- Isabella - Dynamisk navigation baseret på brugerrolle -->
+
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/dataentry/cars" class = "car-style">
+                <img src="/images/biler.png" alt="Biler">
+                <span>BILER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/damage/overview">
+                <img src="/images/skader.png" alt="Skade og udbedring">
+                <span>SKADE OG UDBEDRING</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+            <a href="/leaseagreement">
+                <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+                <span>LEJEAFTALER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'ADMIN'}">
+            <a href="/medarbejder">
+                <img src="/images/medarbejder.png" alt="Medarbejder">
+                <span>MEDARBEJDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING'}">
+            <a href="/customers/startpage">
+                <img src="/images/kunder.png" alt="Kunder">
+                <span>KUNDER</span>
+            </a>
+        </th:block>
+
+        <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN'}">
+            <a href="/business/dashboard">
+                <img src="/images/dashboard.png" alt="Dashboard">
+                <span>DASHBOARD</span>
+            </a>
+        </th:block>
+
+        <a href="/indbakke">
+            <img src="/images/indbakke.png" alt="Indbakke">
+            <span>INDBAKKE</span>
+        </a>
+    </nav>
+
+    <div class="right-side">
+        <div class="search-bar">
+            <input type="text" placeholder="Søg...">
+            <button>Søg</button>
+        </div>
+
+        <div class="user-info">
+            <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+            <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+        </div>
+    </div>
+</header>
+
+<!--Metode til at oprette bil-->
+<div class="table-wrapper">
+<form action="/cars/addCar" method="post" th:object="${car}" class="form-container">
+    <label>Registreringsnummer:</label>
+    <input type="text" th:field="*{registrationNumber}" required><br>
+
+    <label>Stelnummer (VIN):</label>
+    <input type="text" th:field="*{vinNumber}" required><br>
+
+    <!--Isabella drop down til at vælge status-->
+    <label>Status:</label>
+    <select th:field="*{status}">
+        <option value="Available">Available</option>
+        <option value="Rented">Rented</option>
+        <option value="Damaged">Damaged</option>
+        <option value="Returned">Returned</option>
+    </select><br>
+
+    <label>Farve:</label>
+    <input type="text" th:field="*{color}" required><br>
+
+    <label>Købspris:</label>
+    <input type="number" step="0.01" th:field="*{purchasePrice}" required><br>
+
+    <label>Registreringsafgift:</label>
+    <input type="number" step="0.01" th:field="*{registrationFee}" required><br>
+
+    <label>Kilometerstand:</label>
+    <input type="number" th:field="*{mileage}" required><br>
+
+    <label>Lokation:</label>
+    <input type="text" th:field="*{location}" required><br>
+
+    <!--Dropdown til at vælge bilmodel-->
+    <label>Model:</label>
+    <select th:field="*{modelId}">
+        <option th:each="model : ${models}" th:value="${model.modelId}" th:text="${model.brand + ' ' + model.modelName}">Model</option>
+    </select><br>
+
+    <button type="submit" class="button-outline">Opret bil</button>
+</form>
+
+<a href="/dataentry/cars" class="back-link">Tilbage</a>
+</div>
+</body>
+</html>

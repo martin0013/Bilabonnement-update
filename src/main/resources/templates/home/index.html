@@ -1,0 +1,42 @@
+
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Log ind – Bilabonnement</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="login-page">
+
+<main>
+    <!-- Isabella: Overordnet layout og styling af login-siden -->
+    <div class="login-container">
+        <img src="/images/logo.png" alt="Bilabonnement logo" class="login-til-logo">
+
+        <h2>Log ind</h2>
+
+        <!-- Isabella: Viser fejlbesked, hvis login mislykkes -->
+        <div th:if="${error}" class="fejlbesked" th:text="${error}"></div>
+
+        <!--Isabella: Formular hvor bruger indtaster brugernavn og kodeord-->
+        <form action="/login" method="post">
+            <input type="text" name="username" placeholder="Brugernavn" required>
+            <input type="password" name="password" placeholder="Adgangskode" required>
+            <button type="submit">Log ind</button>
+        </form>
+
+        <!-- Infotekst -->
+        <p class="login-note">
+            For at få adgang til Bilabonnements intranet skal du være oprettet som bruger.
+            <br>
+
+        </p>
+
+    </div>
+</main>
+
+
+</body>
+</html>

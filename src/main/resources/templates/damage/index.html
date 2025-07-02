@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Skade og udbedring - Bilabonnement</title>
+  <!-- Martin: Bruger samme styling som Lejeaftaler for konsistens -->
+  <link rel="stylesheet" href="/css/leaseAgreement.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- Martin: Topnavigation med logo, rollebaserede links og brugeroplysninger -->
+<header class="top-wrapper">
+  <div class="logo-left">
+    <a href="/intranet">
+      <img src="/images/logo.png" alt="Bilabonnement logo">
+    </a>
+  </div>
+
+  <nav class="center-logos">
+    <!-- Martin: Navigation vises kun hvis brugerens rolle tillader det -->
+    <th:block th:if="${user != null and (user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN')}">
+      <a href="/dataentry/cars" class="car-style">
+        <img src="/images/biler.png" alt="Biler">
+        <span>BILER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user != null and (user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN')}">
+      <a href="/damage/overview" class="car-style">
+        <img src="/images/skader.png" alt="Skade og udbedring">
+        <span>SKADE OG UDBEDRING</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user != null and (user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN')}">
+      <a href="/leaseagreement">
+        <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+        <span>LEJEAFTALER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user != null and (user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING')}">
+      <a href="/customers/startpage">
+        <img src="/images/kunder.png" alt="Kunder">
+        <span>KUNDER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user != null and (user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN')}">
+      <a href="/business/dashboard">
+        <img src="/images/dashboard.png" alt="Dashboard">
+        <span>DASHBOARD</span>
+      </a>
+    </th:block>
+  </nav>
+
+  <div class="right-side">
+    <div class="search-bar">
+      <input type="text" placeholder="Søg...">
+      <button>Søg</button>
+    </div>
+
+    <!-- Martin: Viser brugernavn og rolle med fallback hvis user er null -->
+    <div class="user-info">
+            <span>Velkommen,
+                <strong th:if="${user != null}" th:text="${user.username}">admin</strong>
+                <strong th:if="${user == null}">Bruger</strong>
+            </span><br>
+      <span>Rolle:
+                <strong th:if="${user != null}" th:text="${user.userRole}">ADMIN</strong>
+                <strong th:if="${user == null}">ROLLE</strong>
+            </span>
+    </div>
+  </div>
+</header>
+
+<!-- Martin: Overskrift og quick link-sektion -->
+<div class="welcome-wrapper">
+  <div class="welcome-text">
+    <h1>Skade og udbedring - Bilabonnement</h1>
+  </div>
+
+  <div class="quick-links">
+    <h3>Quick links:</h3>
+  </div>
+</div>
+
+<!-- Martin: Faneknapper med samme udseende som Lejeaftaler -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <a href="/damage/overview" class="tab-button active" style="text-decoration: none;">Oversigt over skader</a>
+    <a href="/damages/create" class="tab-button" style="text-decoration: none;">Opret en skade</a>
+  </div>
+</div>
+
+
+<!-- Martin: Rammeboks som vises på både oversigt og opret -->
+<div class="info-box">
+  <strong>Oversigt over skadesrapporter</strong><br><br>
+  Hos Bilabonnement er der følgende biler med en skade:
+</div>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bilabonnement Intranet</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="top-wrapper">
+  <div class="logo-left">
+    <img src="/images/logo.png" alt="Bilabonnement logo">
+  </div>
+
+  <nav class="center-logos">
+    <!-- Dynamisk navigation baseret på brugerrolle - Isabella -->
+    <!--Isabella: Vis links baseret på rolle (med th:if)-->
+
+      <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+      <a href="/dataentry/cars">
+        <img src="/images/biler.png" alt="Biler">
+        <span>BILER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user.userRole.name() == 'SKADESMEDARBEJDER' or user.userRole.name() == 'ADMIN'}">
+      <a href="/damage/overview">
+        <img src="/images/skader.png" alt="Skade og udbedring">
+        <span>SKADE OG UDBEDRING</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user.userRole.name() == 'DATAREGISTRERING' or user.userRole.name() == 'ADMIN'}">
+      <a href="/leaseagreement">
+        <img src="/images/lejeaftaler.png" alt="Lejeaftaler">
+        <span>LEJEAFTALER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user.userRole.name() == 'ADMIN'}">
+      <a href="/medarbejder">
+        <img src="/images/medarbejder.png" alt="Medarbejder">
+        <span>MEDARBEJDER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN' or user.userRole.name() == 'DATAREGISTRERING'}">
+      <a href="/customers/startpage">
+        <img src="/images/kunder.png" alt="Kunder">
+        <span>KUNDER</span>
+      </a>
+    </th:block>
+
+    <th:block th:if="${user.userRole.name() == 'FORRETNINGSUDVIKLER' or user.userRole.name() == 'ADMIN'}">
+      <a href="/business/dashboard">
+        <img src="/images/dashboard.png" alt="Dashboard">
+        <span>DASHBOARD</span>
+      </a>
+    </th:block>
+
+    <a href="/indbakke">
+      <img src="/images/indbakke.png" alt="Indbakke">
+      <span>INDBAKKE</span>
+    </a>
+  </nav>
+
+  <!--Isabella: Søgefunktion (mock)-->
+  <div class="right-side">
+    <div class="search-bar">
+      <input type="text" placeholder="Søg...">
+      <button>Søg</button>
+    </div>
+
+    <!--Isabella: Tilføj log ud-knap med link til /logout-->
+    <!--: Vis brugerens navn og rolle i toppen til venstre af siden-->
+    <div class="user-info">
+      <span>Velkommen, <strong th:text="${user.username}">Bruger</strong></span><br>
+      <span>Rolle: <strong th:text="${user.userRole}">ROLLE</strong></span>
+      <a href="/logout" class="logout-link">Log ud</a>
+    </div>
+
+
+
+  </div>
+</header>
+
+<!--Isabella: Lav layout til intranet med overskrift og velkomst-->
+<div class="welcome-wrapper">
+  <div class="welcome-text">
+    <h1>Bilabonnements intranet</h1>
+  </div>
+
+  <div class="quick-links">
+    <h3>Quick links:</h3>
+  </div>
+</div>
+
+
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-button active" onclick="showTab(event, 'information')">Information</button>
+    <button class="tab-button" onclick="showTab(event, 'dashboard')">Nøgletal</button>
+    <button class="tab-button" onclick="showTab(event, 'features')">Nye funktioner</button>
+  </div>
+
+  <!--Isabella - Alt er mock data for at skabe et realistisk billede af hvordan intranettet kunne se ud-->
+  <!--: Tilføj mock-nyheder med billeder og tekst-->
+  <div id="information" class="tab-content active-tab">
+    <div class="info-box">
+      <strong>Nyheder</strong><br><br>
+
+      <!--Nyhed 1-->
+      <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 20px;">
+        <img src="/images/dashboard.png" alt="Dashboard ikon"
+             style="width: 100px; height: auto; border-radius: 6px; object-fit: contain;">
+        <div>
+          <strong>27. maj 2025</strong><br>
+          Nyt dashboard med lagerstatus er nu tilgængeligt.<br>
+          <a href="/business/dashboard" style="color: #005EB8; font-weight: bold;">Gå til Dashboard</a>
+        </div>
+      </div>
+      <br>
+      <!--Nyhed 2-->
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <img src="/images/nyheder/fiat.png" alt="Citroën C3 Aircross"
+             style="width: 100px; height: auto; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <div>
+          <strong>28. maj 2025</strong><br>
+          Vores nye elbil: <strong>Fiat 500e Icon Pack 118 HK</strong><br>
+          <a href="https://bilabonnement.dk/se-alle-biler#/201?modelName=Fiat_500e_Icon_Pack_118_HK"
+             target="_blank" style="color: #005EB8; font-weight: bold;">
+            Se bilen på vores hjemmeside
+          </a>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- Nyhed 3: Ny medarbejder -->
+      <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 20px;">
+        <img src="/images/nyheder/rasmus.png" alt="Rasmus Jakobsen"
+             style="width: 100px; height: auto; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <div>
+          <strong>29. maj 2025</strong><br>
+          Vi byder velkommen til <strong>Rasmus Jakobsen</strong>, vores nye medarbejder i dataregistrerings teamet.<br>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- Nyhed 4: Sommerfest -->
+      <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 20px;">
+        <img src="/images/nyheder/sommerfest.png" alt="Sommerfest ikon"
+             style="width: 100px; height: auto; border-radius: 6px; object-fit: cover; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <div>
+          <strong>30. maj 2025</strong><br>
+          Vi inviterer alle medarbejdere til årets sommerfest fredag d. <strong>14. juni</strong>!<br>
+          Der vil være god mad, kolde drikke og live musik – og selvfølgelig fantastisk selskab.<br><br>
+          Tilmeld dig senest <strong>7. juni</strong> via formularen:<br>
+          <a href="/events/sommerfest-2025" style="color: #005EB8; font-weight: bold;">Tilmeldingsformular</a>
+        </div>
+      </div>
+
+      <!-- Nyhed 6: Systemforbedring -->
+      <div style="display: flex; gap: 12px; align-items: flex-start; margin-top: 20px;">
+        <img src="/images/biler.png" alt="System ikon"
+             style="width: 100px; height: auto; border-radius: 6px; object-fit: contain; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <div>
+          <strong>1. juni 2025</strong><br>
+          Vi har opdateret systemet, så du nu kan ændre bilens status hurtigere og mere overskueligt.<br>
+          Ændringen gælder både for nye og eksisterende biler og kræver ingen ekstra trin.<br>
+          <a href="/dataentry/cars" style="color: #005EB8; font-weight: bold;">Gå til biloversigt</a>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!--Isabella: Tilføj kontaktafsnit med navne og mails-->
+    <div class="info-box" style="font-size: 14px; line-height: 1.3;">
+      <strong style="font-size: 16px;">Dine kontakter hos Bilabonnement</strong><br><br>
+
+      <div style="margin-bottom: 14px;">
+        <strong>HR & ansættelser</strong><br>
+        Sofie Holm – <em>Kontakt vedr. ansættelseskontrakter, ferie og sygdom</em><br>
+        hr@bilabonnement.dk |  12 34 56 78
+      </div>
+      <br>
+
+      <div style="margin-bottom: 14px;">
+        <strong>IT-support & systemfejl</strong><br>
+        Tobias Andersen – <em>Hjælper med login, fejl i systemet og tekniske problemer</em><br>
+        it@bilabonnement.dk |  23 45 67 89
+      </div>
+      <br>
+
+      <div style="margin-bottom: 14px;">
+        <strong>Dataregistrering</strong><br>
+        Louise Birkholm – <em>Spørgsmål til oprettelse, statusændringer eller bildata</em><br>
+        data@bilabonnement.dk |  34 56 78 90
+      </div>
+      <br>
+
+      <div>
+        <strong>Skader & udbedring</strong><br>
+        Jonas Madsen – <em>Kontakt ved skader, mangler eller skadesrapporter</em><br>
+        skader@bilabonnement.dk |  98 76 54 32
+      </div>
+      <br>
+
+      <div style="margin-bottom: 14px;">
+        <strong>Kundeservice</strong><br>
+        Camilla Jensen – <em>Spørgsmål fra kunder, lejeaftaler og afhentning</em><br>
+        kunder@bilabonnement.dk |  45 67 89 01
+      </div>
+      <br>
+
+      <div style="margin-bottom: 14px;">
+        <strong>Salgsafdeling</strong><br>
+        Morten Kristensen – <em>Kontakt om videresalg, opkøb og samarbejdspartnere</em><br>
+        salg@bilabonnement.dk |  56 78 90 12
+      </div>
+      <br>
+
+      <div>
+        <strong>Forretningsudvikling</strong><br>
+        Line Vestergaard – <em>Input til forbedringer, analyser og strategiske spørgsmål</em><br>
+        business@bilabonnement.dk |  67 89 01 23
+      </div>
+
+    </div>
+
+
+    <!--Isabella: Tilføj meddelelsesbokse (læsbart + skriv-felt som disabled)-->
+    <div class="info-box">
+      <strong>Meddelelser</strong><br><br>
+
+      <div style="margin-bottom: 10px;">
+        <strong>Maria (HR):</strong><br>
+        Husk at registrere ferie i systemet senest fredag d. 31. maj.
+      </div>
+
+      <br>
+
+      <div style="margin-bottom: 10px;">
+        <strong>Peter (IT):</strong><br>
+        Dashboardet kører nu stabilt igen efter opdatering. Kontakt os hvis du oplever fejl.
+      </div>
+
+      <br>
+
+      <div style="margin-bottom: 10px;">
+        <strong>Louise (Data):</strong><br>
+        Alle biler med status “Skadet” skal være opdateret inden torsdag kl. 14.
+      </div>
+
+      <br>
+
+      <div style="margin-bottom: 10px;">
+        <strong>Camilla (Kundeservice):</strong><br>
+        Vi oplever øget tryk på telefonerne – hjælp gerne med hurtig opdatering af lejeaftaler.
+      </div>
+
+      <br>
+
+      <div>
+        <strong>Sofie (Ledelsen):</strong><br>
+        Tak for jeres indsats i maj! Vi glæder os til at se jer til sommerfesten d. 14. juni
+      </div>
+
+      <br>
+
+      <!-- Skriv ny meddelelse (mock) -->
+      <div style="border-top: 1px solid #ccc; padding-top: 10px;">
+        <label for="mock-message" style="font-weight: bold;">Skriv ny meddelelse:</label><br>
+        <textarea id="mock-message" rows="3" placeholder="Skriv din meddelelse her..." disabled
+                  style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-top: 6px; resize: none; background-color: #f4f4f4; color: #888;"></textarea>
+        <button disabled
+                style="margin-top: 8px; padding: 6px 12px; border: none; border-radius: 6px; background-color: #cccccc; color: white; cursor: not-allowed;">
+          Send
+        </button>
+        <p style="font-size: 12px; color: #999; margin-top: 6px;"><em>(Funktion ikke tilgængelig endnu)</em></p>
+      </div>
+
+    </div>
+
+  <div id="dashboard" class="tab-content">
+    <p>Her skal der være generelle nøgletal for firmaet...</p>
+  </div>
+
+  <div id="features" class="tab-content">
+    <p>Nye funktioner kommer snart...</p>
+  </div>
+</div>
+
+<script>
+  //Isabella: Tilføj faneblade med JavaScript
+  // til faneblade uden reload
+  function showTab(event, tabId) {
+    const allTabs = document.querySelectorAll('.tab-content');
+    const allButtons = document.querySelectorAll('.tab-button');
+
+    allTabs.forEach(tab => tab.classList.remove('active-tab'));
+    allButtons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(tabId).classList.add('active-tab');
+    event.target.classList.add('active');
+  }
+</script>
+
+</div>
+</body>
+</html>
