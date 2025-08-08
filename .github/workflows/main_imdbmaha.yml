@@ -32,6 +32,7 @@ jobs:
         with:
           name: java-app
           path: '${{ github.workspace }}/target/*.jar'
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,4 +61,5 @@ jobs:
           app-name: 'imdbmaha'
           slot-name: 'Production'
           package: '*.jar'
+
           
